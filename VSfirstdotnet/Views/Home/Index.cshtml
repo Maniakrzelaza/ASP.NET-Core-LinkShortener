@@ -1,0 +1,29 @@
+﻿@model VSfirstdotnet.Models.LinkList
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    form {
+        display: inline;
+    }
+</style>
+<form action="/Home/Index" method="post">
+    <label>link</label><input type="text" name="link2" value="" />
+    <button type="submit" value="submit">Dodaj link</button>
+</form>
+<br>
+@for (int i = 0; i < @Model.list.Count; i++)
+{
+    @Model.list[i]
+    <text>&nbsp;</text>
+    @:&nbsp;
+
+    <a href="http://localhost:55726/@Model.Hashlist[i]">http://localhost:55726/@Model.Hashlist[i]</a>
+    <form action="/Home/IndexDelete" method="Post">
+        <input type="hidden" name="id" value=@i>
+        <button type="submit" value="submit">Delete</button>
+    </form>
+    <br>
+
+}
+
