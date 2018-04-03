@@ -12,34 +12,39 @@ namespace VSfirstdotnet.Controllers
 {
     public class HomeController : Controller
     {
-       
+        private readonly ILinkRepo linkRepo;
+
+        public HomeController(ILinkRepo repository)
+        {
+            this.linkRepo = repository;
+
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
-
-            return View("IndexWithForm");
+            LinkList model = new LinkList();
+            model.setList(linkRepo.Read());
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Index(LinkList model)
         {
-            linkRepo.addToList(model.link2);
-            linkRepo.addToHashList(Endecrypt.shortenIt(model.link2).Replace("https://goo.gl/", ""));
-            model.list = linkRepo.getList();
-            model.Hashlist = linkRepo.getHashList();
+            Link link = new Link();
+            link.setLongLink(model.link2);
+            link.setShortLink(link.shortenIt().Replace("https://goo.gl/", ""));
+            linkRepo.Create(link);
+            model.setList(linkRepo.Read());
             return View(model);
          
         }
         [HttpPost]
         public IActionResult IndexDelete(LinkList model)
         {
-
-            
-            model.list= linkRepo.getList();
-            model.Hashlist = linkRepo.getHashList();
-            model.list.RemoveAt(model.getId());
-            model.Hashlist.RemoveAt(model.getId());
-            return View("Index",model);
+            linkRepo.Delete(model.getId());
+            model.setList(linkRepo.Read());
+            return View("Index", model);
 
         }
     }

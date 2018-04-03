@@ -14,13 +14,13 @@
 <br>
 @for (int i = 0; i < @Model.list.Count; i++)
 {
-    @Model.list[i]
+    @Model.list[i].longLink
     <text>&nbsp;</text>
     @:&nbsp;
 
-    <a href="http://localhost:55726/@Model.Hashlist[i]">http://localhost:55726/@Model.Hashlist[i]</a>
+    <a href="http://localhost:55726/@Model.list[i].shortLink">@Model.list[i].shortLink</a>
     <form action="/Home/IndexDelete" method="Post">
-        <input type="hidden" name="id" value=@i>
+        <input type="hidden" name="id" value=@Model.list[i].id>
         <button type="submit" value="submit">Delete</button>
     </form>
     <br>

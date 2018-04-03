@@ -13,7 +13,9 @@ namespace VSfirstdotnet.Controllers
         [Route("{id}")]
         public IActionResult Index(string id)
         {
-            string decoded = Endecrypt.unShortenIt("https://goo.gl/"+id);
+            Link temp = new Link();
+            temp.setShortLink("https://goo.gl/" + id);
+            string decoded = temp.unShortenIt();
 
             return Redirect(decoded);
         }
@@ -21,7 +23,6 @@ namespace VSfirstdotnet.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            // string decoded = Endecrypt.unShortenIt(Id);
 
             return Redirect("Home/Index");
         }

@@ -8,12 +8,11 @@ namespace VSfirstdotnet.Models
     public class LinkList
     {
 
-        public List<string> list = new List<string>();
-        public List<string> Hashlist = new List<string>();
+        public List<Link> list;
         public string link2 { get; set; }
         public int id { get; set; }
         public int getId() { return id; }
         public void setId(int a) { id = a; }
-
+        public void setList(List<Link> l) { this.list = l; }
     }
 }
