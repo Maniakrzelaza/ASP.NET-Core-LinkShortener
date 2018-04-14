@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using VSfirstdotnet.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace VSfirstdotnet
 {
@@ -23,10 +25,21 @@ namespace VSfirstdotnet
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            
             var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<LinkContext>(options => options.UseSqlServer(connection));
             services.AddTransient<ILinkRepo, LinkRepo>();
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+            services.AddMvc();
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("MyPolicy"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,13 +54,16 @@ namespace VSfirstdotnet
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+ 
             app.UseStaticFiles();
-
+            app.UseCors("MyPolicy");
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/")
                 .MapRoute("unshorten", "{controller=Unshorten}/{action=Index}/{id}")
+                .MapRoute("Del", "{controller=LinkApi}/{action=Delete}/{id}")
+                .MapRoute("GetLink", "{controller=LinkApi}/{action=GetLink}/{shortLink}")
+                .MapRoute("AddLink", "{controller=LinkApi}/{action=AddLink}/{longLink}")
                 .MapRoute("linkApi", "{controller=LinkApi}/{action=Read}/{page}");
 
             });
