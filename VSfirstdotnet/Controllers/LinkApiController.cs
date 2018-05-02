@@ -63,20 +63,41 @@ namespace VSfirstdotnet.Controllers
         [Route("AddLink")]
         [Route("{id}")]
         [HttpGet]
-        public IActionResult AddLink(string longLink,int page)
+        public IActionResult AddLink(string longLink)
         {
 
             Link link = new Link();
             link.setLongLink(longLink);
             link.setShortLink(link.shortenIt().Replace("https://goo.gl/", ""));
             linkRepo.Create(link);
-            LinkPage linkPage = new LinkPage();
+           /* LinkPage linkPage = new LinkPage();
             double temp = Convert.ToDouble(linkRepo.Read().Count());
             linkPage.maxPage = ((int)Math.Ceiling(temp / 20.0) - 1) >= 0 ? ((int)Math.Ceiling(temp / 20.0) - 1) : 0;
             linkPage.currentPage = page;
-            linkPage.items = linkRepo.Read().OrderByDescending((theLink) => theLink.id).Skip(20 * page).Take(20);
+            linkPage.items = linkRepo.Read().OrderByDescending((theLink) => theLink.id).Skip(20 * page).Take(20);*/
 
-            return Ok(linkPage);
+            return Ok();
+        }
+        [Route("EditLink")]
+        [Route("{id}")]
+        [HttpGet]
+        public IActionResult EditLink(int id,string longLink)
+        {
+
+            Link link = new Link();
+            link.setLongLink(longLink);
+            string shortLink=link.shortenIt().Replace("https://goo.gl/", "");
+            linkRepo.Edit(id,longLink,shortLink);
+            return Ok(link);
+        }
+        [Route("GetOneLink")]
+        [Route("{id}")]
+        [HttpGet]
+        public IActionResult GetOneLink(int id)
+        {
+
+            Link link = linkRepo.ReadOne(id);
+            return Ok(link);
         }
     }
 }

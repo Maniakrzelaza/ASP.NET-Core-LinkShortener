@@ -12,7 +12,8 @@ namespace VSfirstdotnet.Models
         void Delete(int id);
         Link Create(Link link);
         List<Link> Read();
-        Link Read(int id);
+        Link ReadOne(int id);
+        void Edit(int id, string longLink, string shortLink);
     }
         public class LinkRepo : ILinkRepo
     {
@@ -45,9 +46,17 @@ namespace VSfirstdotnet.Models
             return search;
         }
 
-        public Link Read(int id)
+        public Link ReadOne(int id)
         {
             return _dbContext.links.Find(id);
+        }
+        public void Edit(int id,string longLink, string shortLink)
+        {
+            Link link = _dbContext.links.Find(id);
+            link.setLongLink(longLink);
+            link.setShortLink(shortLink);
+            _dbContext.links.Update(link);
+            _dbContext.SaveChanges();
         }
     }
 }

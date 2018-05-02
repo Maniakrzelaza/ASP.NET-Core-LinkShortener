@@ -63,6 +63,8 @@ namespace VSfirstdotnet
                 .MapRoute("Del", "{controller=LinkApi}/{action=Delete}/{id}")
                 .MapRoute("GetLink", "{controller=LinkApi}/{action=GetLink}/{shortLink}")
                 .MapRoute("AddLink", "{controller=LinkApi}/{action=AddLink}/{longLink}")
+                .MapRoute("EditLink", "{controller=LinkApi}/{action=EditLink}/{longLink}")
+                .MapRoute("GetOneLink", "{controller=LinkApi}/{action=GetOneLink}/{id}")
                 .MapRoute("linkApi", "{controller=LinkApi}/{action=Read}/{page}");
 
             });
